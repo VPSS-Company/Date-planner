@@ -31,9 +31,43 @@ body{
   font-family:"DM Sans",Arial,sans-serif;
   color:var(--ink);
   background:
-    radial-gradient(circle at 12% 15%,rgba(239,130,156,.22),transparent 25%),
-    radial-gradient(circle at 88% 84%,rgba(239,130,156,.18),transparent 28%),
-    #fff8fa;
+    radial-gradient(circle at 15% 18%,rgba(255,166,193,.45),transparent 24%),
+    radial-gradient(circle at 88% 20%,rgba(222,177,255,.32),transparent 27%),
+    radial-gradient(circle at 80% 88%,rgba(255,188,211,.42),transparent 30%),
+    linear-gradient(135deg,#fff7fb 0%,#fff1f7 45%,#f9efff 100%);
+  position:relative;
+}
+
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  width:360px;
+  height:360px;
+  border-radius:50%;
+  pointer-events:none;
+  filter:blur(55px);
+  opacity:.38;
+  z-index:0;
+  animation:ambientDrift 9s ease-in-out infinite alternate;
+}
+
+body::before{
+  top:-120px;
+  left:-100px;
+  background:rgba(255,116,161,.38);
+}
+
+body::after{
+  right:-120px;
+  bottom:-130px;
+  background:rgba(184,126,255,.28);
+  animation-delay:-4s;
+}
+
+@keyframes ambientDrift{
+  from{transform:translate3d(-12px,-8px,0) scale(1)}
+  to{transform:translate3d(22px,18px,0) scale(1.12)}
 }
 
 /* Cute four-point stars */
@@ -50,6 +84,8 @@ body{
   height:15px;
   transform:rotate(45deg);
   opacity:.72;
+  animation:starFloat 5s ease-in-out infinite;
+  filter:drop-shadow(0 0 7px rgba(233,154,174,.45));
 }
 
 .star::before,
@@ -57,7 +93,7 @@ body{
   content:"";
   position:absolute;
   inset:4px;
-  background:#e99aae;
+  background:linear-gradient(135deg,#ef8da8,#d98be9);
   border-radius:2px;
 }
 
@@ -77,6 +113,13 @@ body{
 .star:nth-child(6){bottom:19%;right:12%;transform:rotate(45deg) scale(.55)}
 .star:nth-child(7){top:28%;left:18%;transform:rotate(45deg) scale(.42)}
 .star:nth-child(8){bottom:34%;right:18%;transform:rotate(45deg) scale(.45)}
+.star:nth-child(2),.star:nth-child(5){animation-delay:-2s}
+.star:nth-child(3),.star:nth-child(7){animation-delay:-3.5s}
+
+@keyframes starFloat{
+  0%,100%{opacity:.38;transform:rotate(45deg) translateY(0) scale(.9)}
+  50%{opacity:1;transform:rotate(45deg) translateY(-13px) scale(1.16)}
+}
 
 .app{
   width:min(460px,100%);
@@ -184,10 +227,15 @@ body{
   animation:float 3s ease-in-out infinite;
 }
 
+  
+
 @keyframes float{
-  50%{transform:translateY(-5px) rotate(2deg)}
+  0%,100%{transform:translateY(0) rotate(-2deg) scale(1)}
+  50%{transform:translateY(-9px) rotate(3deg) scale(1.055)}
 }
 
+
+  
 h1,h2{
   margin:0;
   font-family:"Playfair Display",Georgia,serif;
@@ -391,6 +439,111 @@ input:focus{
 .summary-row span{color:var(--muted)}
 .summary-row strong{text-align:right}
 
+
+/* Polished date + time picker */
+.date-picker-card{
+  padding:16px;
+  margin-bottom:12px;
+  border:1.5px solid #e0d0d5;
+  border-radius:20px;
+  background:linear-gradient(145deg,#fff,#fff7fa);
+  box-shadow:0 8px 22px rgba(90,55,67,.05);
+}
+
+.picker-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.picker-title strong{
+  font-size:12px;
+}
+
+.picker-title span{
+  color:var(--pink-dark);
+  font-size:10px;
+  font-weight:700;
+}
+
+.date-strip{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+}
+
+.date-chip{
+  min-width:0;
+  padding:9px 4px;
+  border:1.5px solid #e2d0d6;
+  border-radius:14px;
+  background:#fff;
+  color:#705963;
+  cursor:pointer;
+  transition:.22s ease;
+}
+
+.date-chip span{
+  display:block;
+  font-size:8px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.date-chip strong{
+  display:block;
+  margin-top:4px;
+  font-size:16px;
+}
+
+.date-chip.selected{
+  color:#fff;
+  border-color:var(--pink-dark);
+  background:linear-gradient(135deg,#ed8aa2,#d96582);
+  box-shadow:0 7px 16px rgba(201,88,118,.2);
+  transform:translateY(-2px);
+}
+
+.time-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.time-chip{
+  padding:11px 5px;
+  border:1.5px solid #e2d0d6;
+  border-radius:13px;
+  background:#fff;
+  color:#705963;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.22s ease;
+}
+
+.time-chip:hover{
+  transform:translateY(-2px);
+  border-color:#e99aac;
+}
+
+.time-chip.selected{
+  color:#fff;
+  border-color:var(--pink-dark);
+  background:linear-gradient(135deg,#ed8aa2,#d96582);
+  box-shadow:0 6px 14px rgba(201,88,118,.18);
+}
+
+.hidden-picker-input{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+
 @media(max-width:430px){
   body{padding:10px}
   .app,.screen{min-height:calc(100vh - 20px)}
@@ -488,14 +641,22 @@ input:focus{
       <h2>When should we do it?</h2>
       <p class="question">Pick a date and time.</p>
 
-      <div class="field-card">
-        <label for="dateInput">Date</label>
-        <input id="dateInput" type="date">
+      <div class="date-picker-card">
+        <div class="picker-title">
+          <strong>Choose a date</strong>
+          <span id="selectedDateLabel">Pick one</span>
+        </div>
+        <div id="dateStrip" class="date-strip"></div>
+        <input id="dateInput" class="hidden-picker-input" type="date" aria-hidden="true">
       </div>
 
-      <div class="field-card">
-        <label for="timeInput">Time</label>
-        <input id="timeInput" type="time">
+      <div class="date-picker-card">
+        <div class="picker-title">
+          <strong>Choose a time</strong>
+          <span id="selectedTimeLabel">Pick one</span>
+        </div>
+        <div id="timeGrid" class="time-grid"></div>
+        <input id="timeInput" class="hidden-picker-input" type="time" aria-hidden="true">
       </div>
     </div>
 
@@ -521,11 +682,17 @@ input:focus{
 </main>
 
 <script>
+
+
+  
 /*
   WEB3FORMS
   Replace the value below with YOUR Web3Forms access key.
   Nothing about Web3Forms is shown in the webpage interface.
 */
+
+
+  
 const WEB3FORMS_ACCESS_KEY = "d7d46b17-5c8f-4252-ae3a-02dc3c30e5de";
 
 let currentScreen = "welcome";
@@ -555,6 +722,9 @@ function goBack(){
   }
 }
 
+
+  
+
 function startPlanning(){
   historyStack = ["welcome"];
   showScreen("activity", false);
@@ -576,6 +746,8 @@ function handleNo(){
   }
 }
 
+
+  
 function selectActivity(button){
   document.querySelectorAll(".choice").forEach(c => c.classList.remove("selected"));
   button.classList.add("selected");
@@ -605,6 +777,8 @@ function confirmDate(){
     return;
   }
 
+
+  
   document.getElementById("summaryActivity").textContent = selectedActivity;
   document.getElementById("summaryDate").textContent = formatDate(date);
   document.getElementById("summaryTime").textContent = formatTime(time);
@@ -621,6 +795,8 @@ function formatDate(value){
   });
 }
 
+
+  
 function formatTime(value){
   const [hours,minutes] = value.split(":");
   const d = new Date();
@@ -633,11 +809,17 @@ function formatTime(value){
 
 async function sendSelection(activity,date,time){
 
+
+
+
+  
   /*
     Web3Forms sends this submission directly to the email
     associated with the access key. No Web3Forms controls are
     displayed to the person using the page.
   */
+
+  
 
   const message = [
     "New date selection 💗",
@@ -658,10 +840,14 @@ async function sendSelection(activity,date,time){
     botcheck: ""
   };
 
+
+  
   /*
     Show the result immediately for a smooth experience.
     The request runs in the background.
   */
+
+  
   historyStack = [];
   showScreen("success", false);
 
@@ -690,6 +876,9 @@ async function sendSelection(activity,date,time){
   }
 }
 
+
+
+
 function restart(){
   selectedActivity = "";
   historyStack = [];
@@ -699,6 +888,9 @@ function restart(){
 
   document.getElementById("dateInput").value = "";
   document.getElementById("timeInput").value = "";
+  selectedDateLabel.textContent = "Pick one";
+  selectedTimeLabel.textContent = "Pick one";
+  document.querySelectorAll(".date-chip,.time-chip").forEach(b => b.classList.remove("selected"));
 
   const noButton = document.getElementById("noButton");
   noButton.textContent = "No";
@@ -707,14 +899,102 @@ function restart(){
   showScreen("welcome", false);
 }
 
-/* Don't allow selecting a past date. */
+
+  
+/* Custom mobile-friendly date + time picker */
 const dateInput = document.getElementById("dateInput");
+const timeInput = document.getElementById("timeInput");
+const dateStrip = document.getElementById("dateStrip");
+const timeGrid = document.getElementById("timeGrid");
+const selectedDateLabel = document.getElementById("selectedDateLabel");
+const selectedTimeLabel = document.getElementById("selectedTimeLabel");
+
 const today = new Date();
-dateInput.min =
-  today.getFullYear() + "-" +
-  String(today.getMonth()+1).padStart(2,"0") + "-" +
-  String(today.getDate()).padStart(2,"0");
+today.setHours(0,0,0,0);
+
+function isoDate(date){
+  return date.getFullYear() + "-" +
+    String(date.getMonth()+1).padStart(2,"0") + "-" +
+    String(date.getDate()).padStart(2,"0");
+}
+
+
+  
+function buildDateStrip(){
+  dateStrip.innerHTML = "";
+
+  for(let i=0;i<5;i++){
+    const d = new Date(today);
+    d.setDate(today.getDate()+i);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "date-chip";
+    button.dataset.value = isoDate(d);
+
+    const day = i === 0 ? "Today" :
+      d.toLocaleDateString(undefined,{weekday:"short"});
+
+    button.innerHTML =
+      "<span>" + day + "</span>" +
+      "<strong>" + d.getDate() + "</strong>";
+
+    button.onclick = () => selectDate(button, d);
+    dateStrip.appendChild(button);
+  }
+}
+
+function selectDate(button, date){
+  document.querySelectorAll(".date-chip").forEach(b => b.classList.remove("selected"));
+  button.classList.add("selected");
+
+  const value = isoDate(date);
+  dateInput.value = value;
+
+  selectedDateLabel.textContent =
+    date.toLocaleDateString(undefined,{month:"short",day:"numeric"});
+}
+
+
+  
+const timeOptions = [
+  ["10:00","10:00 AM"],
+  ["12:00","12:00 PM"],
+  ["14:00","2:00 PM"],
+  ["16:00","4:00 PM"],
+  ["18:00","6:00 PM"],
+  ["20:00","8:00 PM"]
+];
+
+function buildTimeGrid(){
+  timeGrid.innerHTML = "";
+
+  
+  timeOptions.forEach(([value,label]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "time-chip";
+    button.textContent = label;
+
+    button.onclick = () => {
+      document.querySelectorAll(".time-chip").forEach(b => b.classList.remove("selected"));
+      button.classList.add("selected");
+      timeInput.value = value;
+      selectedTimeLabel.textContent = label;
+    };
+
+    timeGrid.appendChild(button);
+  });
+}
+
+  
+buildDateStrip();
+  
+buildTimeGrid();
+  
 </script>
 
 </body>
+
+
 </html>
