@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Just a Little Date? 💗</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+:root{
+  --pink:#ed829d;
+  --pink-dark:#c95675;
+  --pink-light:#fff0f4;
+  --ink:#392d33;
+  --muted:#806c74;
+  --border:#624b54;
+  --shadow:rgba(105,64,77,.18);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  overflow-x:hidden;
+  font-family:"DM Sans",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 15%,rgba(239,130,156,.22),transparent 25%),
+    radial-gradient(circle at 88% 84%,rgba(239,130,156,.18),transparent 28%),
+    #fff8fa;
+}
+
+/* Cute four-point stars */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:15px;
+  height:15px;
+  transform:rotate(45deg);
+  opacity:.72;
+}
+
+.star::before,
+.star::after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  background:#e99aae;
+  border-radius:2px;
+}
+
+.star::before{
+  transform:scaleX(2.7);
+}
+
+.star::after{
+  transform:scaleY(2.7);
+}
+
+.star:nth-child(1){top:9%;left:9%;transform:rotate(45deg) scale(.7)}
+.star:nth-child(2){top:16%;right:10%;transform:rotate(45deg) scale(1.05)}
+.star:nth-child(3){top:43%;left:4%;transform:rotate(45deg) scale(.55)}
+.star:nth-child(4){top:51%;right:5%;transform:rotate(45deg) scale(.75)}
+.star:nth-child(5){bottom:12%;left:12%;transform:rotate(45deg) scale(1)}
+.star:nth-child(6){bottom:19%;right:12%;transform:rotate(45deg) scale(.55)}
+.star:nth-child(7){top:28%;left:18%;transform:rotate(45deg) scale(.42)}
+.star:nth-child(8){bottom:34%;right:18%;transform:rotate(45deg) scale(.45)}
+
+.app{
+  width:min(460px,100%);
+  min-height:700px;
+  position:relative;
+  z-index:2;
+  overflow:hidden;
+  border:1.5px solid rgba(98,75,84,.62);
+  border-radius:30px;
+  background:rgba(255,253,253,.97);
+  box-shadow:0 25px 65px var(--shadow),8px 8px 0 rgba(239,130,156,.25);
+}
+
+.screen{
+  display:none;
+  min-height:700px;
+  padding:28px 26px 30px;
+  flex-direction:column;
+  animation:show .3s ease both;
+}
+
+.screen.active{display:flex}
+
+@keyframes show{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.topbar{
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.back-btn,.dots-btn{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid #decbd0;
+  border-radius:50%;
+  background:#fff;
+  color:#705962;
+  font-size:18px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.back-btn:hover,.dots-btn:hover{
+  transform:translateY(-2px);
+  border-color:var(--pink);
+  color:var(--pink-dark);
+}
+
+.progress{
+  display:flex;
+  gap:5px;
+}
+
+.progress span{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#ead9de;
+}
+
+.progress span.active{
+  width:20px;
+  border-radius:8px;
+  background:var(--pink);
+}
+
+.hero{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.badge{
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid #edc4ce;
+  background:var(--pink-light);
+  color:var(--pink-dark);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.2px;
+}
+
+.heart{
+  width:90px;
+  height:90px;
+  margin:22px 0 18px;
+  display:grid;
+  place-items:center;
+  border-radius:29px;
+  border:1px solid #efc1cc;
+  background:linear-gradient(145deg,#fff0f4,#ffe0e8);
+  box-shadow:0 12px 30px rgba(201,88,118,.12);
+  font-size:44px;
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  50%{transform:translateY(-5px) rotate(2deg)}
+}
+
+h1,h2{
+  margin:0;
+  font-family:"Playfair Display",Georgia,serif;
+  letter-spacing:-.5px;
+}
+
+h1{font-size:37px;line-height:1.05}
+h2{font-size:29px;line-height:1.1}
+
+.subtitle{
+  max-width:320px;
+  margin:15px auto 27px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.65;
+}
+
+.button-row{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.primary,.secondary{
+  border-radius:16px;
+  padding:13px 15px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.primary{
+  border:1.5px solid var(--pink-dark);
+  color:white;
+  background:linear-gradient(135deg,#ed8aa2,#d96582);
+  box-shadow:0 7px 15px rgba(201,88,118,.2);
+}
+
+.secondary{
+  border:1.5px solid #d9c8ce;
+  color:#655159;
+  background:white;
+}
+
+.primary:hover,.secondary:hover{transform:translateY(-2px)}
+.primary:active,.secondary:active{transform:translateY(0)}
+
+.content{
+  flex:1;
+  padding-top:35px;
+}
+
+.eyebrow{
+  margin-bottom:9px;
+  color:var(--pink-dark);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.question{
+  margin:10px 0 21px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.choice-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.choice{
+  min-height:138px;
+  padding:18px 10px;
+  border:1.5px solid #dbcbd0;
+  border-radius:19px;
+  background:#fff;
+  text-align:center;
+  box-shadow:0 5px 14px rgba(90,55,67,.04);
+}
+
+.choice:hover{
+  transform:translateY(-3px);
+  border-color:#e99aac;
+}
+
+.choice.selected{
+  border-color:var(--pink-dark);
+  background:#fff3f6;
+  box-shadow:0 0 0 3px rgba(239,130,156,.13);
+}
+
+.choice-icon{
+  width:52px;
+  height:52px;
+  margin:0 auto 11px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:#fff0f4;
+  font-size:26px;
+}
+
+.choice strong{
+  display:block;
+  font-size:12px;
+}
+
+.choice small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.field-card{
+  padding:15px;
+  margin-bottom:12px;
+  border:1.5px solid #e0d0d5;
+  border-radius:18px;
+  background:#fff;
+}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  color:#705963;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+
+input{
+  width:100%;
+  border:1.5px solid #dccbd1;
+  border-radius:13px;
+  padding:12px;
+  outline:none;
+  color:var(--ink);
+  background:#fffafb;
+  font:inherit;
+  font-size:13px;
+}
+
+input:focus{
+  border-color:var(--pink);
+  box-shadow:0 0 0 3px rgba(239,130,156,.11);
+}
+
+.bottom-actions{
+  margin-top:auto;
+  padding-top:18px;
+  display:grid;
+  gap:9px;
+}
+
+.tiny-note{
+  text-align:center;
+  color:#a18b93;
+  font-size:9px;
+  line-height:1.5;
+}
+
+.result{
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.result .heart{margin-top:0}
+
+.summary{
+  width:100%;
+  margin:22px 0 14px;
+  padding:17px;
+  border:1px solid #ead4da;
+  border-radius:20px;
+  background:#fff7f9;
+  text-align:left;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:8px 0;
+  border-bottom:1px dashed #ead6db;
+  font-size:11px;
+}
+
+.summary-row:last-child{border-bottom:0}
+.summary-row span{color:var(--muted)}
+.summary-row strong{text-align:right}
+
+@media(max-width:430px){
+  body{padding:10px}
+  .app,.screen{min-height:calc(100vh - 20px)}
+  .screen{padding:23px 20px 25px}
+  h1{font-size:33px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars" aria-hidden="true">
+  <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+  <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+</div>
+
+<main class="app">
+
+  <!-- WELCOME -->
+  <section id="welcome" class="screen active">
+    <div class="topbar">
+      <button class="back-btn" type="button" onclick="goBack()">←</button>
+      <div class="progress"><span class="active"></span><span></span><span></span></div>
+      <button class="dots-btn" type="button">•••</button>
+    </div>
+
+    <div class="hero">
+      <div class="badge">A LITTLE QUESTION</div>
+      <div class="heart">💗</div>
+      <h1>Will you go on<br>a date with me?</h1>
+      <p class="subtitle">Choose yes if you'd like to plan something cute together.</p>
+
+      <div class="button-row">
+        <button class="primary" type="button" onclick="startPlanning()">Yes! 💗</button>
+        <button id="noButton" class="secondary" type="button" onclick="handleNo()">No</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY -->
+  <section id="activity" class="screen">
+    <div class="topbar">
+      <button class="back-btn" type="button" onclick="goBack()">←</button>
+      <div class="progress"><span></span><span class="active"></span><span></span></div>
+      <span></span>
+    </div>
+
+    <div class="content">
+      <div class="eyebrow">Step 1 of 2</div>
+      <h2>What should we do?</h2>
+      <p class="question">Pick whichever sounds nicest.</p>
+
+      <div class="choice-grid">
+        <button class="choice" data-value="Shopping" onclick="selectActivity(this)">
+          <div class="choice-icon">🛍️</div>
+          <strong>Shopping</strong>
+          <small>Browse & explore</small>
+        </button>
+
+        <button class="choice" data-value="Evening walk" onclick="selectActivity(this)">
+          <div class="choice-icon">🌆</div>
+          <strong>Evening walk</strong>
+          <small>Fresh air & talk</small>
+        </button>
+
+        <button class="choice" data-value="Phone call" onclick="selectActivity(this)">
+          <div class="choice-icon">📞</div>
+          <strong>Phone call</strong>
+          <small>Just talk</small>
+        </button>
+
+        <button class="choice" data-value="Video call" onclick="selectActivity(this)">
+          <div class="choice-icon">💻</div>
+          <strong>Video call</strong>
+          <small>Hang out online</small>
+        </button>
+      </div>
+    </div>
+
+    <div class="bottom-actions">
+      <button class="primary" type="button" onclick="nextToDate()">Continue →</button>
+    </div>
+  </section>
+
+  <!-- DATE/TIME -->
+  <section id="date" class="screen">
+    <div class="topbar">
+      <button class="back-btn" type="button" onclick="goBack()">←</button>
+      <div class="progress"><span></span><span class="active"></span><span class="active"></span></div>
+      <span></span>
+    </div>
+
+    <div class="content">
+      <div class="eyebrow">Step 2 of 2</div>
+      <h2>When should we do it?</h2>
+      <p class="question">Pick a date and time.</p>
+
+      <div class="field-card">
+        <label for="dateInput">Date</label>
+        <input id="dateInput" type="date">
+      </div>
+
+      <div class="field-card">
+        <label for="timeInput">Time</label>
+        <input id="timeInput" type="time">
+      </div>
+    </div>
+
+    <div class="bottom-actions">
+      <button class="primary" type="button" onclick="confirmDate()">That works 💗</button>
+    </div>
+  </section>
+
+  <!-- SUCCESS -->
+  <section id="success" class="screen result">
+    <div class="heart">💌</div>
+    <div class="badge">IT'S A DATE</div>
+    <h2 style="margin-top:18px">Okay, it's planned! ✨</h2>
+
+    <div class="summary">
+      <div class="summary-row"><span>Activity</span><strong id="summaryActivity">—</strong></div>
+      <div class="summary-row"><span>Date</span><strong id="summaryDate">—</strong></div>
+      <div class="summary-row"><span>Time</span><strong id="summaryTime">—</strong></div>
+    </div>
+
+    <button class="secondary" type="button" onclick="restart()">Start again</button>
+  </section>
+</main>
+
+<script>
+/*
+  WEB3FORMS
+  Replace the value below with YOUR Web3Forms access key.
+  Nothing about Web3Forms is shown in the webpage interface.
+*/
+const WEB3FORMS_ACCESS_KEY = "d7d46b17-5c8f-4252-ae3a-02dc3c30e5de";
+
+let currentScreen = "welcome";
+let historyStack = [];
+let selectedActivity = "";
+let noClicks = 0;
+
+const screenOrder = ["welcome","activity","date","success"];
+
+function showScreen(id, saveHistory = true){
+  if(saveHistory && currentScreen !== id){
+    historyStack.push(currentScreen);
+  }
+
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  currentScreen = id;
+}
+
+function goBack(){
+  if(historyStack.length > 0){
+    const previous = historyStack.pop();
+
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(previous).classList.add("active");
+    currentScreen = previous;
+  }
+}
+
+function startPlanning(){
+  historyStack = ["welcome"];
+  showScreen("activity", false);
+}
+
+function handleNo(){
+  noClicks++;
+
+  const button = document.getElementById("noButton");
+
+  if(noClicks === 1){
+    button.textContent = "Wait, really?";
+  }else if(noClicks === 2){
+    button.textContent = "Are you sure?";
+  }else{
+    // Final playful state: the No button stops changing.
+    button.textContent = "Error 404: no option left";
+    noClicks = 3;
+  }
+}
+
+function selectActivity(button){
+  document.querySelectorAll(".choice").forEach(c => c.classList.remove("selected"));
+  button.classList.add("selected");
+  selectedActivity = button.dataset.value;
+}
+
+function nextToDate(){
+  if(!selectedActivity){
+    alert("Pick an activity first 💗");
+    return;
+  }
+
+  showScreen("date");
+}
+
+function confirmDate(){
+  const date = document.getElementById("dateInput").value;
+  const time = document.getElementById("timeInput").value;
+
+  if(!date){
+    alert("Pick a date first 💗");
+    return;
+  }
+
+  if(!time){
+    alert("Pick a time first 💗");
+    return;
+  }
+
+  document.getElementById("summaryActivity").textContent = selectedActivity;
+  document.getElementById("summaryDate").textContent = formatDate(date);
+  document.getElementById("summaryTime").textContent = formatTime(time);
+
+  sendSelection(selectedActivity, date, time);
+}
+
+function formatDate(value){
+  return new Date(value + "T00:00:00").toLocaleDateString(undefined,{
+    weekday:"long",
+    year:"numeric",
+    month:"long",
+    day:"numeric"
+  });
+}
+
+function formatTime(value){
+  const [hours,minutes] = value.split(":");
+  const d = new Date();
+  d.setHours(Number(hours),Number(minutes),0,0);
+  return d.toLocaleTimeString([],{
+    hour:"numeric",
+    minute:"2-digit"
+  });
+}
+
+async function sendSelection(activity,date,time){
+
+  /*
+    Web3Forms sends this submission directly to the email
+    associated with the access key. No Web3Forms controls are
+    displayed to the person using the page.
+  */
+
+  const message = [
+    "New date selection 💗",
+    "",
+    "Activity: " + activity,
+    "Date: " + formatDate(date),
+    "Time: " + formatTime(time)
+  ].join("\n");
+
+  const payload = {
+    access_key: WEB3FORMS_ACCESS_KEY,
+    subject: "New Date Selection 💗",
+    from_name: "Date Planner",
+    activity: activity,
+    date: formatDate(date),
+    time: formatTime(time),
+    message: message,
+    botcheck: ""
+  };
+
+  /*
+    Show the result immediately for a smooth experience.
+    The request runs in the background.
+  */
+  historyStack = [];
+  showScreen("success", false);
+
+  if(WEB3FORMS_ACCESS_KEY === "YOUR_WEB3FORMS_ACCESS_KEY"){
+    console.warn("Add your Web3Forms access key to enable email delivery.");
+    return;
+  }
+
+  try{
+    const response = await fetch("https://api.web3forms.com/submit",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      },
+      body:JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if(!result.success){
+      console.error("Web3Forms error:", result.message);
+    }
+  }catch(error){
+    console.error("Web3Forms connection error:", error);
+  }
+}
+
+function restart(){
+  selectedActivity = "";
+  historyStack = [];
+  noClicks = 0;
+
+  document.querySelectorAll(".choice").forEach(c => c.classList.remove("selected"));
+
+  document.getElementById("dateInput").value = "";
+  document.getElementById("timeInput").value = "";
+
+  const noButton = document.getElementById("noButton");
+  noButton.textContent = "No";
+  noButton.onclick = handleNo;
+
+  showScreen("welcome", false);
+}
+
+/* Don't allow selecting a past date. */
+const dateInput = document.getElementById("dateInput");
+const today = new Date();
+dateInput.min =
+  today.getFullYear() + "-" +
+  String(today.getMonth()+1).padStart(2,"0") + "-" +
+  String(today.getDate()).padStart(2,"0");
+</script>
+
+</body>
+</html>
