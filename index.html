@@ -70,7 +70,7 @@ body::after{
   to{transform:translate3d(22px,18px,0) scale(1.12)}
 }
 
-/* Cute four-point stars */
+/* Floating Pink Hearts Background */
 .stars{
   position:fixed;
   inset:0;
@@ -80,45 +80,34 @@ body::after{
 
 .star{
   position:absolute;
-  width:15px;
-  height:15px;
-  transform:rotate(45deg);
+  font-size: 20px;
   opacity:.72;
   animation:starFloat 5s ease-in-out infinite;
   filter:drop-shadow(0 0 7px rgba(233,154,174,.45));
 }
 
-.star::before,
-.star::after{
-  content:"";
-  position:absolute;
-  inset:4px;
-  background:linear-gradient(135deg,#ef8da8,#d98be9);
-  border-radius:2px;
-}
-
 .star::before{
-  transform:scaleX(2.7);
+  content: "🩷";
 }
 
 .star::after{
-  transform:scaleY(2.7);
+  display: none;
 }
 
-.star:nth-child(1){top:9%;left:9%;transform:rotate(45deg) scale(.7)}
-.star:nth-child(2){top:16%;right:10%;transform:rotate(45deg) scale(1.05)}
-.star:nth-child(3){top:43%;left:4%;transform:rotate(45deg) scale(.55)}
-.star:nth-child(4){top:51%;right:5%;transform:rotate(45deg) scale(.75)}
-.star:nth-child(5){bottom:12%;left:12%;transform:rotate(45deg) scale(1)}
-.star:nth-child(6){bottom:19%;right:12%;transform:rotate(45deg) scale(.55)}
-.star:nth-child(7){top:28%;left:18%;transform:rotate(45deg) scale(.42)}
-.star:nth-child(8){bottom:34%;right:18%;transform:rotate(45deg) scale(.45)}
+.star:nth-child(1){top:9%;left:9%;transform:scale(.7)}
+.star:nth-child(2){top:16%;right:10%;transform:scale(1.05)}
+.star:nth-child(3){top:43%;left:4%;transform:scale(.55)}
+.star:nth-child(4){top:51%;right:5%;transform:scale(.75)}
+.star:nth-child(5){bottom:12%;left:12%;transform:scale(1)}
+.star:nth-child(6){bottom:19%;right:12%;transform:scale(.55)}
+.star:nth-child(7){top:28%;left:18%;transform:scale(.42)}
+.star:nth-child(8){bottom:34%;right:18%;transform:scale(.45)}
 .star:nth-child(2),.star:nth-child(5){animation-delay:-2s}
 .star:nth-child(3),.star:nth-child(7){animation-delay:-3.5s}
 
 @keyframes starFloat{
-  0%,100%{opacity:.38;transform:rotate(45deg) translateY(0) scale(.9)}
-  50%{opacity:1;transform:rotate(45deg) translateY(-13px) scale(1.16)}
+  0%,100%{opacity:.38;transform:translateY(0) scale(.9)}
+  50%{opacity:1;transform:translateY(-13px) scale(1.16)}
 }
 
 .app{
@@ -227,15 +216,11 @@ body::after{
   animation:float 3s ease-in-out infinite;
 }
 
-  
-
 @keyframes float{
   0%,100%{transform:translateY(0) rotate(-2deg) scale(1)}
   50%{transform:translateY(-9px) rotate(3deg) scale(1.055)}
 }
 
-
-  
 h1,h2{
   margin:0;
   font-family:"Playfair Display",Georgia,serif;
@@ -438,7 +423,6 @@ input:focus{
 .summary-row:last-child{border-bottom:0}
 .summary-row span{color:var(--muted)}
 .summary-row strong{text-align:right}
-
 
 /* Polished date + time picker */
 .date-picker-card{
@@ -682,17 +666,6 @@ input:focus{
 </main>
 
 <script>
-
-
-  
-/*
-  WEB3FORMS
-  Replace the value below with YOUR Web3Forms access key.
-  Nothing about Web3Forms is shown in the webpage interface.
-*/
-
-
-  
 const WEB3FORMS_ACCESS_KEY = "d7d46b17-5c8f-4252-ae3a-02dc3c30e5de";
 
 let currentScreen = "welcome";
@@ -722,9 +695,6 @@ function goBack(){
   }
 }
 
-
-  
-
 function startPlanning(){
   historyStack = ["welcome"];
   showScreen("activity", false);
@@ -740,14 +710,11 @@ function handleNo(){
   }else if(noClicks === 2){
     button.textContent = "Are you sure?";
   }else{
-    // Final playful state: the No button stops changing.
     button.textContent = "Error 404: no option left";
     noClicks = 3;
   }
 }
 
-
-  
 function selectActivity(button){
   document.querySelectorAll(".choice").forEach(c => c.classList.remove("selected"));
   button.classList.add("selected");
@@ -777,8 +744,6 @@ function confirmDate(){
     return;
   }
 
-
-  
   document.getElementById("summaryActivity").textContent = selectedActivity;
   document.getElementById("summaryDate").textContent = formatDate(date);
   document.getElementById("summaryTime").textContent = formatTime(time);
@@ -795,8 +760,6 @@ function formatDate(value){
   });
 }
 
-
-  
 function formatTime(value){
   const [hours,minutes] = value.split(":");
   const d = new Date();
@@ -808,19 +771,6 @@ function formatTime(value){
 }
 
 async function sendSelection(activity,date,time){
-
-
-
-
-  
-  /*
-    Web3Forms sends this submission directly to the email
-    associated with the access key. No Web3Forms controls are
-    displayed to the person using the page.
-  */
-
-  
-
   const message = [
     "New date selection 💗",
     "",
@@ -840,14 +790,6 @@ async function sendSelection(activity,date,time){
     botcheck: ""
   };
 
-
-  
-  /*
-    Show the result immediately for a smooth experience.
-    The request runs in the background.
-  */
-
-  
   historyStack = [];
   showScreen("success", false);
 
@@ -876,9 +818,6 @@ async function sendSelection(activity,date,time){
   }
 }
 
-
-
-
 function restart(){
   selectedActivity = "";
   historyStack = [];
@@ -899,8 +838,6 @@ function restart(){
   showScreen("welcome", false);
 }
 
-
-  
 /* Custom mobile-friendly date + time picker */
 const dateInput = document.getElementById("dateInput");
 const timeInput = document.getElementById("timeInput");
@@ -918,8 +855,6 @@ function isoDate(date){
     String(date.getDate()).padStart(2,"0");
 }
 
-
-  
 function buildDateStrip(){
   dateStrip.innerHTML = "";
 
@@ -955,8 +890,6 @@ function selectDate(button, date){
     date.toLocaleDateString(undefined,{month:"short",day:"numeric"});
 }
 
-
-  
 const timeOptions = [
   ["10:00","10:00 AM"],
   ["12:00","12:00 PM"],
@@ -969,7 +902,6 @@ const timeOptions = [
 function buildTimeGrid(){
   timeGrid.innerHTML = "";
 
-  
   timeOptions.forEach(([value,label]) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -987,14 +919,9 @@ function buildTimeGrid(){
   });
 }
 
-  
 buildDateStrip();
-  
 buildTimeGrid();
-  
 </script>
 
 </body>
-
-
 </html>
